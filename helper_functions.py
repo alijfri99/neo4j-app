@@ -5,7 +5,7 @@ def signup(username, password, session):
         return False
     else:
         session.run("CREATE(n:User{username: '" + username + "', password: '" + password + "'});")
-        print("Signed Up Successfully")
+        print("Signed Up & Logged In Successfully")
         return True
 
 
@@ -40,7 +40,7 @@ def add(username, password, name, number, session):
 
 def show(username, password, session):
     result = session.run("MATCH(m:Contact)<-[:Saved]-(n:User) WHERE n.username = '" + username + "' AND n.password = '"
-                         + password + "' RETURN m.name AS name, m.number AS number;")
+                         + password + "' RETURN m.name AS name, m.number AS number ORDER BY m.name;")
     if result.peek() is None:
         print("No Contact Found.")
         return False
