@@ -5,6 +5,7 @@ def signup(username, password, session):
         return False
     else:
         session.run("CREATE(n:User{username: '" + username + "', password: '" + password + "'});")
+        print("Signed Up Successfully")
         return True
 
 
@@ -20,6 +21,7 @@ def login(username, password, session):
             print("Invalid Password.")
             return False
         else:
+            print("Logged In Successfully")
             return True
 
 
@@ -41,10 +43,11 @@ def show(username, password, session):
                          + password + "' RETURN m.name AS name, m.number AS number;")
     if result.peek() is None:
         print("No Contact Found.")
-        return
+        return False
     else:
         for record in result:
             print("Name: " + record['name'] + ", Number: " + record['number'])
+        return True
 
 
 def delete(username, password, arg, session):
@@ -58,3 +61,17 @@ def delete(username, password, arg, session):
                     "') AND n.username = '" + username + "' AND n.password = '" + password + "' DETACH DELETE m;")
         print("Contact Deleted Successfully.")
         return True
+
+
+def search(username, password, arg, session):
+    result = session.run("MATCH(n:User)-[:Saved]->(m:Contact) WHERE (m.name CONTAINS '" + arg +
+                         "' OR m.number CONTAINS '" + arg +
+                         "') AND n.username = '" + username + "' AND n.password = '" + password +
+                         "' RETURN m.name AS name, m.number AS number;")
+    if result.peek() is None:
+        print("No Such Contact Found.")
+        return False
+    else:
+        for record in result:
+            print("Name: " + record['name'] + ", Number: " + record['number'])
+    return True

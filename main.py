@@ -4,4 +4,4 @@ from helper_functions import *
 graphdb = GraphDatabase.driver(uri="bolt://localhost:7687", auth=("neo4j", "mypassword"))
 session = graphdb.session()
 
-delete("Ali", "password", "Wolf", session)
+search("Ali", "password", "bd", session)
