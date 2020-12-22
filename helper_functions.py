@@ -67,7 +67,7 @@ def search(username, password, arg, session):
     result = session.run("MATCH(n:User)-[:Saved]->(m:Contact) WHERE (m.name CONTAINS '" + arg +
                          "' OR m.number CONTAINS '" + arg +
                          "') AND n.username = '" + username + "' AND n.password = '" + password +
-                         "' RETURN m.name AS name, m.number AS number;")
+                         "' RETURN m.name AS name, m.number AS number ORDER BY m.name;")
     if result.peek() is None:
         print("No Such Contact Found.")
         return False
