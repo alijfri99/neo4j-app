@@ -45,3 +45,16 @@ def show(username, password, session):
     else:
         for record in result:
             print("Name: " + record['name'] + ", Number: " + record['number'])
+
+
+def delete(username, password, arg, session):
+    result = session.run("MATCH(n:User)-[:Saved]->(m:Contact) WHERE (m.name = '" + arg + "' OR m.number = '" + arg +
+                         "') AND n.username = '" + username + "' AND n.password = '" + password + "' RETURN m;")
+    if result.peek() is None:
+        print("Contact Not Found.")
+        return False
+    else:
+        session.run("MATCH(n:User)-[:Saved]->(m:Contact) WHERE (m.name = '" + arg + "' OR m.number = '" + arg +
+                    "') AND n.username = '" + username + "' AND n.password = '" + password + "' DETACH DELETE m;")
+        print("Contact Deleted Successfully.")
+        return True
